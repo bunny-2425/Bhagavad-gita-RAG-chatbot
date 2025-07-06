@@ -1,6 +1,13 @@
-streamlit
 langchain
+langchain-community
 chromadb
 sentence-transformers
-pypdf
-tiktoken
+llama-cpp-python
+transformers
+huggingface_hub
+torch
+tqdm
+streamlit
+python-dotenv
+bs4
+accelerate
