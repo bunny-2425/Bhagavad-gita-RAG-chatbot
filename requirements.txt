@@ -1,14 +1,4 @@
-langchain
-langchain-community
-chromadb
-sentence-transformers
-llama-cpp-python
-transformers
-huggingface_hub
-torch
-tqdm
 streamlit
-python-dotenv
-bs4
-accelerate
 requests
+langchain
+python-dotenv  # if you're using env vars
