@@ -1,11 +1,13 @@
 import streamlit as st
 import requests
+import os
 from langchain.prompts import PromptTemplate
 
 # ------------------------
 # CONFIG
 # ------------------------
-BACKEND_URL = "https://<your-hf-username>.hf.space/generate"  # ⛳ Replace with your actual backend URL
+# Get Hugging Face backend URL from Render environment variable
+BACKEND_URL = os.getenv("HF_BACKEND_URL")  # Replace with your actual backend URL
 
 # ------------------------
 # PromptTemplate Setup
