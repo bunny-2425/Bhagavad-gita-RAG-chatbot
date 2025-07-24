@@ -1,4 +1,2 @@
 streamlit
 requests
-langchain
-python-dotenv  # if you're using env vars
