@@ -1,36 +1,46 @@
 import streamlit as st
 import requests
 import os
-from langchain.prompts import PromptTemplate
 
 # ------------------------ CONFIG ------------------------
-BACKEND_URL = os.getenv("HF_BACKEND_URL")  # Store this securely in Render
+BACKEND_URL = os.getenv("HF_BACKEND_URL")  # Must be set in Render
 
-# Submit
-if st.button("📖 Get Answer"):
-    if not question.strip():
-        st.warning("⚠️ Please enter a valid question.")
-    elif BACKEND_URL is None:
+st.set_page_config(page_title="Shri Krishna RAG Chatbot", page_icon="🕉️")
+
+st.title("🕉️ Shri Krishna RAG Chatbot")
+st.markdown("Ask your question about **Bhagavad Gita** or **Sanatan Dharma**")
+
+# Input
+question = st.text_input("🙏 Ask your question:")
+
+# Initialize session state
+if "answer" not in st.session_state:
+    st.session_state.answer = ""
+
+# On Enter Key press or Button
+if question:
+    st.session_state.answer = ""  # Clear previous
+    if BACKEND_URL is None:
         st.error("❌ Backend URL not found. Set the 'HF_BACKEND_URL' in Render.")
     else:
         with st.spinner("🕉️ Fetching wisdom from scriptures..."):
             try:
                 response = requests.post(
                     BACKEND_URL,
-                    json={"question": question},  # only send user input
-                    timeout=30,
+                    json={"question": question},
+                    timeout=60,
                 )
-
                 if response.status_code == 200:
-                    answer = response.json().get("response", "❌ No response found.")
+                    st.session_state.answer = response.json().get("response", "❌ No response.")
                 else:
-                    answer = f"⚠️ Backend error: {response.status_code}"
-
+                    st.session_state.answer = f"⚠️ Backend error: {response.status_code}"
             except requests.exceptions.Timeout:
-                answer = "⏳ Request timed out. Please try again later."
+                st.session_state.answer = "⏳ Timeout. Try again."
             except requests.exceptions.ConnectionError:
-                answer = "❌ Could not connect to the backend. Is Hugging Face Space running?"
+                st.session_state.answer = "❌ Connection error. Is backend live?"
             except Exception as e:
-                answer = f"⚠️ Unexpected error: {str(e)}"
+                st.session_state.answer = f"⚠️ Unexpected error: {str(e)}"
 
-        st.markdown(f"**🕉️ Shri Krishna Bot:**\n\n{answer}")
+# Display answer
+if st.session_state.answer:
+    st.markdown(f"**🕉️ Shri Krishna Bot:**\n\n{st.session_state.answer}")
