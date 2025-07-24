@@ -28,7 +28,7 @@ if question:
                 response = requests.post(
                     BACKEND_URL,
                     json={"question": question},
-                    timeout=60,
+                    timeout=100,
                 )
                 if response.status_code == 200:
                     st.session_state.answer = response.json().get("response", "❌ No response.")
